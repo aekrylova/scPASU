@@ -9,6 +9,8 @@ Most of the needed packages and tools are included in the Snakemake environment.
 * [cellranger](https://www.10xgenomics.com/support/software/cell-ranger/latest/tutorials/cr-tutorial-in)
 * [polyAfilter](https://github.com/MarekSvob/polyAfilter)
 * [goldmine](https://github.com/jeffbhasin/goldmine)
+
+
 Download the sample dataset FASTQs here: [LINK]
 Run cellranger alignment on the eight samples in the dataset using the GRCh38_v2024 reference available from 10XGenomics. Make sure the --id argument matches the sample name as listed in the dataset.
 Edit the config.yaml file to match your data. To run the sample dataset, the only variables that should be changed are ncores, work_dir, cellrangeroutputpath, cellrangerrefpath, polyAfilterpath, cellrangerpath, and goldminepath.  
