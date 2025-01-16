@@ -21,3 +21,8 @@ snakemake run_module_1 --jobs 20 --cluster 'bsub -q e80medium -W 6:00 -u AEKrylo
 ```
 
 Additional guidance for using the snakemake tool: [General Snakemake Command Line Reference](https://snakemake.readthedocs.io/en/v7.19.1/executing/cli.html)
+
+## DAG of pipeline workflow:
+
+![dag](https://github.com/user-attachments/assets/4062fef2-eb3a-4a7e-9fb2-3fc82fa4e15f)
+
