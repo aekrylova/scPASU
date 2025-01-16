@@ -1,8 +1,4 @@
-# Snakemake workflow: `<scPASU>`
-
-[![Snakemake](https://img.shields.io/badge/snakemake-≥6.3.0-brightgreen.svg)](https://snakemake.github.io)
-[![GitHub actions status](https://github.com/<owner>/<repo>/workflows/Tests/badge.svg?branch=main)](https://github.com/<owner>/<repo>/actions?query=branch%3Amain+workflow%3ATests)
-
+# Snakemake workflow: scPASU
 
 Installation requirements:
 Most of the needed packages and tools are included in the Snakemake environment.yml files. The following tools need to be installed separately:
@@ -10,16 +6,19 @@ Most of the needed packages and tools are included in the Snakemake environment.
 * [polyAfilter](https://github.com/MarekSvob/polyAfilter)
 * [goldmine](https://github.com/jeffbhasin/goldmine)
 
-
 Download the sample dataset FASTQs here: [LINK]
+
 Run cellranger alignment on the eight samples in the dataset using the GRCh38_v2024 reference available from 10XGenomics. Make sure the --id argument matches the sample name as listed in the dataset.
+
 Edit the config.yaml file to match your data. To run the sample dataset, the only variables that should be changed are ncores, work_dir, cellrangeroutputpath, cellrangerrefpath, polyAfilterpath, cellrangerpath, and goldminepath.  
+
 It is recommended to run the pipeline on an HPC cluster: Snakemake Cluster Execution
+
 Finally, since the pipeline is built using conda environments, make sure to specify the –use-conda argument when running. Example command:
+```bash
 snakemake run_module_1 --jobs 20 --cluster 'bsub -q e80medium -W 6:00 -u AEKrylova@mdanderson.org -n 32 -M 200 -R "rusage[mem=200]"' --use-conda
 General Snakemake Command Line Reference
-
-
+```
 
 ## Usage
 
