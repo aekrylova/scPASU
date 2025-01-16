@@ -11,7 +11,7 @@ Download the sample dataset FASTQs and Seurat object here: [Preview dataset](htt
 
 Run cellranger alignment on the eight samples in the dataset using the GRCh38_v2024 reference available from 10XGenomics. Make sure the --id argument matches the sample name as listed in the dataset.
 
-Edit the config.yaml file to match your data. To run the sample dataset, the only variables that should be changed are ncores, work_dir, cellrangeroutputpath, cellrangerrefpath, polyAfilterpath, cellrangerpath, seurat_obj_file, polyAfilter_workdir, and goldminepath to match the locations and specifications for your system.  
+Edit the config/config.yaml file to match your data. To run the sample dataset, the only variables that should be changed are ncores, work_dir, cellrangeroutputpath, cellrangerrefpath, polyAfilterpath, cellrangerpath, seurat_obj_file, polyAfilter_workdir, and goldminepath to match the locations and specifications for your system.  
 
 It is recommended to run the pipeline on an HPC cluster: [Snakemake Cluster Execution](https://snakemake.readthedocs.io/en/v7.19.1/executing/cluster.html)
 
