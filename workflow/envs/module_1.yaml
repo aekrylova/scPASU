@@ -1,0 +1,17 @@
+name: module_1
+channels:
+  - conda-forge
+  - bioconda
+dependencies:
+ - python=3.10
+ - samtools
+ - numpy
+ - pip
+ - umi_tools
+ - deeptools
+ - subset-bam
+ - pip:
+      - gffutils
+      - pysam
+      - biopython
+      - dill

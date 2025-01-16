@@ -1,4 +1,63 @@
-# Main entrypoint of the workflow. 
-# Please follow the best practices: 
-# https://snakemake.readthedocs.io/en/stable/snakefiles/best_practices.html,
-# in particular regarding the standardized folder structure mentioned there. 
+## Load in modules
+
+include: "rules/1_data_preprocessing.smk"
+include: "rules/2_peak_ref.smk"
+include: "rules/3_peak_ref_cleanup.smk"
+include: "rules/4_count_matrix.smk"
+include: "rules/5_APA_testing.smk"
+
+## Target rules
+
+rule all:
+    input:
+        "outputs/5b_APA_testing/",
+        "outputs/5b_DEG_testing/",
+        "outputs/qc_ucsc_tracks/dedup_uniq_genomicAfiltered_merged_plus_raw.bw",
+        "outputs/qc_ucsc_tracks/dedup_uniq_genomicAfiltered_merged_minus_raw.bw",
+        "outputs/qc_ucsc_tracks/dedup_uniq_merged_plus_raw.bw",
+        "outputs/qc_ucsc_tracks/dedup_uniq_merged_minus_raw.bw",
+        "outputs/filtered_tracks/",
+        "outputs/fractional_usage_tracks/",
+        "outputs/track_annotations/",
+        f"outputs/nuc_freq_plot_{config['kmer_size']}-mer/",
+        f"outputs/{config['compartment']}_PA_ref_stats.txt"
+
+rule run_module_1:
+    input:
+        "outputs/1d_merged_bam/dedup_uniq_genomicAfiltered_merged.bam",
+        "outputs/1d_merged_bam/dedup_uniq_merged.bam"
+
+rule run_module_2:
+    input:
+        "outputs/2d_intersect_run/all_filtered_reads/",
+        "outputs/2d_intersect_run/polyA_reads/"
+
+rule run_module_3:
+    input:
+        "outputs/3e_fragmented_peaks_to_merge/"
+
+rule run_module_4:
+    input:
+        "outputs/4b_cellranger_genecount/",
+        "outputs/4b_cellranger_peakcount/"
+
+rule run_module_5:
+    input:
+        "outputs/5b_APA_testing/",
+        "outputs/5b_DEG_testing/"
+
+rule generate_qc_tracks:
+    input:
+        "outputs/qc_ucsc_tracks/dedup_uniq_genomicAfiltered_merged_plus_raw.bw",
+        "outputs/qc_ucsc_tracks/dedup_uniq_genomicAfiltered_merged_minus_raw.bw",
+        "outputs/qc_ucsc_tracks/dedup_uniq_merged_plus_raw.bw",
+        "outputs/qc_ucsc_tracks/dedup_uniq_merged_minus_raw.bw",
+
+rule generate_filtered_annotated_tracks:
+    input:
+        "outputs/filtered_tracks/",
+        "outputs/track_annotations/",
+
+rule generate_fractional_usage_tracks:
+    input:
+        "outputs/fractional_usage_tracks/",

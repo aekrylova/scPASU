@@ -1,0 +1,24 @@
+name: module_2
+channels:
+  - conda-forge
+  - bioconda
+dependencies:
+ - r-essentials
+ - r-base
+ - r-magrittr
+ - r-data.table
+ - r-dplyr
+ - r-gtools
+ - r-argparser
+ - r-parallelly
+ - bioconductor-genomicranges
+ - bedtools
+ - deeptools
+ - python=3.10
+ - perl-bioperl
+ - perl-bioperl-core
+ - macs2
+ - samtools
+ - picard
+ - ucsc-bigwigtobedgraph
+

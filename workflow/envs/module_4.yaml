@@ -1,0 +1,11 @@
+name: module_4
+channels:
+  - conda-forge
+  - bioconda
+dependencies:
+ - python=3.10
+ - r-essentials
+ - r-base
+ - r-dplyr
+ - r-argparser
+ - 10x_bamtofastq

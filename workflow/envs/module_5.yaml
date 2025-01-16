@@ -1,0 +1,24 @@
+name: module_5
+channels:
+  - conda-forge
+  - bioconda
+dependencies:
+ - r-essentials
+ - r-base
+ - r-data.table
+ - r-dplyr
+ - r-stringr
+ - r-seurat
+ - r-ggplot2
+ - r-reshape
+ - r-readr
+ - r-pheatmap
+ - r-tibble
+ - bioconductor-apeglm
+ - bioconductor-annotationdbi
+ - bioconductor-edger
+ - bioconductor-deseq2
+ - bioconductor-dexseq
+ - bioconductor-glmgampoi
+ - ucsc-bedgraphtobigwig
+ - ucsc-bedtobigbed
