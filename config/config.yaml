@@ -1,0 +1,46 @@
+## config file (yaml) with needed dependencies and variables: 
+
+## General Variables
+# File prefix name / cell type of interest
+compartment: "fibroblasts"
+# Genome (hg38 or mm11)
+genomename: "hg38"
+# Chromosomes of interest (mouse or human)
+chrs: "chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr20,chr21,chr22,chrX,chrY"
+# Names of samples as they appear in cellranger alignment output
+samples: ["Donor_6-Dome", "Donor_6-Dome-Nuc", "Donor_6-Neck", "Donor_6-Neck-Nuc", "Donor_6-UO", "Donor_6-UO-Nuc", "Donor_6-UVJ", "Donor_6-UVJ-Nuc"]
+# Set "true" or "false" depending on if you want PAS filtering to be performed
+PAS_filtering: "true"
+# Kmer size for nucleotide plotting
+kmer_size: 201
+# Number of cores to use for parallel processing
+ncores: 20
+# Names of cell groups to compare during APA & DEG testing
+group_one: "Intra_muscular_fibroblasts"
+group_two: "Peri_urothelial_fibroblasts"
+# Name of column in your metadata file that contains the cell group information
+meta_testing_column: "cell_type"
+
+## Analysis Paths
+# Absolute path to the workflow directory
+work_dir: "/rsrch5/scratch/mol_cgenesis/aekrylova/Snakemake_draft/workflow/"
+# Path to folder with cellranger alignment outputs for all samples
+cellrangeroutputpath: "data/alignments"
+# Path to genome used for cellranger alignment
+cellrangerrefpath: "data/GRCh38_v2024/"
+# Path to folder containing tsv files for each sample with the barcodes of interest
+barcodepath: "data/subset_bams"
+# Path to Seurat object of cells of interest (optional, used during peak matrix merging to ensure barcode labels match)
+seurat_obj_file: "data/fibroblast_subset.rds"
+# Path to csv file containing metadata for cells of interest
+metadata_file: "data/fibroblasts_subset_metadata.csv"
+
+## Tool Installation Paths
+# Path to empty folder named polyAfilter that will be used as temp directory
+polyAfilter_workdir: "data/polyAfilter/"
+# Path to local installation of the polyAfilter package
+polyAfilterpath: "scripts/polyAfilter/"
+# Absolute path to installation of the cellranger tool
+cellrangerpath: "/risapps/rhel7/cellranger/7.1.0/" 
+# Absolute path to installation of the goldmine package
+goldminepath: "/rsrch5/scratch/mol_cgenesis/aekrylova/Snakemake_draft/workflow/scripts"
