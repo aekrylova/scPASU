@@ -5,6 +5,7 @@ Most of the needed packages and tools are included in the Snakemake environment.
 * [cellranger](https://www.10xgenomics.com/support/software/cell-ranger/latest/tutorials/cr-tutorial-in)
 * [polyAfilter](https://github.com/MarekSvob/polyAfilter)
 * [goldmine](https://github.com/jeffbhasin/goldmine)
+
 Use the following command to clone this repository:
 ```
 git clone https://github.com/aekrylova/scPASU.git
