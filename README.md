@@ -5,6 +5,11 @@ Most of the needed packages and tools are included in the Snakemake environment.
 * [cellranger](https://www.10xgenomics.com/support/software/cell-ranger/latest/tutorials/cr-tutorial-in)
 * [polyAfilter](https://github.com/MarekSvob/polyAfilter)
 * [goldmine](https://github.com/jeffbhasin/goldmine)
+Use the following command to clone this repository:
+```
+git clone https://github.com/aekrylova/scPASU.git
+```
+To run, navigate to the workflow folder within the directory structure and run the snakemake command from there. 
 
 ## Sample data setup instructions:
 Download the sample dataset FASTQs and Seurat object here: [Preview dataset](https://data.mendeley.com/preview/6bf3w4wrj8?a=10479bdc-60fa-4632-84f8-89545ed45cf3) 
