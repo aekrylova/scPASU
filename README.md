@@ -22,9 +22,15 @@ Edit the config/config.yaml file to match your data. To run the sample dataset, 
 
 It is recommended to run the pipeline on an HPC cluster: [Snakemake Cluster Execution](https://snakemake.readthedocs.io/en/v7.19.1/executing/cluster.html)
 
-Finally, since the pipeline is built using conda environments, make sure to specify the –use-conda argument when running. Example command:
+Finally, since the pipeline is built using conda environments, make sure to specify the –use-conda argument when running. 
+
+If you are using snakemake version < 8.0, you can use the --cluster command line argument to submit to an HPC. Example command:
 ```bash
 snakemake run_module_1 --jobs 20 --cluster 'bsub -q e80medium -W 6:00 -u AEKrylova@mdanderson.org -n 32 -M 200 -R "rusage[mem=200]"' --use-conda
+```
+If you are using snakemake version 8.01 or greater, the --cluster command is deprecated. You will need to install the [cluster-generic plugin](https://snakemake.github.io/snakemake-plugin-catalog/plugins/executor/cluster-generic.html) and use that in the command line. Alternatively, Snakemake also has lsf- or slurm-specific plugins ypu can install instead. Example command:
+```bash
+snakemake run_module_1 --jobs 20 --executor cluster-generic --cluster-generic-submit-cmd 'bsub -q e80medium -W 6:00 -u AEKrylova@mdanderson.org -n 32 -M 200 -R "rusage[mem=200]"' --use-conda
 ```
 
 Additional guidance for using the snakemake tool: [General Snakemake Command Line Reference](https://snakemake.readthedocs.io/en/v7.19.1/executing/cli.html)
