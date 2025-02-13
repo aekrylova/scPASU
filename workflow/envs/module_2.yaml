@@ -3,22 +3,21 @@ channels:
   - conda-forge
   - bioconda
 dependencies:
- - r-essentials
- - r-base
- - r-magrittr
- - r-data.table
- - r-dplyr
- - r-gtools
- - r-argparser
- - r-parallelly
- - bioconductor-genomicranges
- - bedtools
- - deeptools
+ - r-essentials=4.3
+ - r-base=4.3.3
+ - r-magrittr=2.0.3
+ - r-data.table=1.15.2
+ - r-dplyr=1.1.4
+ - r-gtools=3.9.5
+ - r-argparser=0.7.2
+ - r-parallelly=1.37.1
+ - bioconductor-genomicranges=1.54.1
+ - bedtools=2.30.0
+ - deeptools=3.5.5
  - python=3.10
- - perl-bioperl
- - perl-bioperl-core
- - macs2
- - samtools
- - picard
+ - perl-bioperl=1.7.8
+ - perl-bioperl-core=1.7.8
+ - macs2=2.2.9.1
+ - samtools=1.16.1
+ - picard=2.23.8
  - ucsc-bigwigtobedgraph
-
