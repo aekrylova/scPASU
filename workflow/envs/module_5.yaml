@@ -3,22 +3,22 @@ channels:
   - conda-forge
   - bioconda
 dependencies:
- - r-essentials
- - r-base
- - r-data.table
- - r-dplyr
- - r-stringr
- - r-seurat
- - r-ggplot2
- - r-reshape
- - r-readr
- - r-pheatmap
- - r-tibble
- - bioconductor-apeglm
- - bioconductor-annotationdbi
- - bioconductor-edger
- - bioconductor-deseq2
- - bioconductor-dexseq
- - bioconductor-glmgampoi
+ - r-essentials=4.3
+ - r-base=4.3.3
+ - r-data.table=1.15.2
+ - r-dplyr=1.1.4
+ - r-stringr=1.5.1
+ - r-seurat=5.1.0
+ - r-ggplot2=3.5.1
+ - r-reshape=0.8.9
+ - r-readr=2.1.5
+ - r-pheatmap=1.0.12
+ - r-tibble=3.2.1
+ - bioconductor-apeglm=1.24.0
+ - bioconductor-annotationdbi=1.64.1
+ - bioconductor-edger=4.0.16
+ - bioconductor-deseq2=1.42.0
+ - bioconductor-dexseq=1.48.0
+ - bioconductor-glmgampoi=1.14.0
  - ucsc-bedgraphtobigwig
  - ucsc-bedtobigbed
