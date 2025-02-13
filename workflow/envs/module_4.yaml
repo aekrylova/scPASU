@@ -4,8 +4,8 @@ channels:
   - bioconda
 dependencies:
  - python=3.10
- - r-essentials
- - r-base
- - r-dplyr
- - r-argparser
- - 10x_bamtofastq
+ - r-essentials=4.3
+ - r-base=4.3.3
+ - r-dplyr=1.1.4
+ - r-argparser=0.7.2
+ - 10x_bamtofastq=1.4.1
