@@ -16,7 +16,7 @@ To run, navigate to the workflow folder within the directory structure and run t
 ## Sample data setup instructions:
 Download the sample dataset FASTQs and Seurat object here: [Preview dataset](https://data.mendeley.com/preview/6bf3w4wrj8?a=10479bdc-60fa-4632-84f8-89545ed45cf3) 
 
-Run cellranger alignment on the eight samples in the dataset using the GRCh38_v2024 reference available from 10XGenomics. Make sure the --id argument matches the sample name as listed in the dataset.
+Run cellranger alignment on the eight samples in the dataset using the GRCh38_v2024 reference available from 10XGenomics (the pipeline was tested on cellranger 7.1.0). Make sure the --id argument matches the sample name as listed in the dataset.
 
 Edit the config/config.yaml file to match your data. To run the sample dataset, the only variables that should be changed are ncores, work_dir, cellrangeroutputpath, cellrangerrefpath, polyAfilterpath, cellrangerpath, seurat_obj_file, polyAfilter_workdir, and goldminepath to match the locations and specifications for your system.  
 
