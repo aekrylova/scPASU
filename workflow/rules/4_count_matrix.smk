@@ -31,7 +31,7 @@ rule cellranger_make_scPASU_ref:
 
         echo Create reference package... &>> {log}
         cd {input.work_dir}/outputs/
-        cellranger mkref --ref-version={params.version} --genome={params.genome}_{params.compartment} --fasta={input.work_dir}/{input.fasta} --genes=$gtf --nthreads={params.ncores} --memgb={params.memgb} &>> {input.work_dir}/{log}
+        cellranger mkref --ref-version={params.version} --genome={params.genome}_{params.compartment} --fasta={input.fasta} --genes=$gtf --nthreads={params.ncores} --memgb={params.memgb} &>> {input.work_dir}/{log}
         """
 
 rule bam_to_fastq:
@@ -96,7 +96,7 @@ rule cellranger_genecount:
             fastq_dir={input.work_dir}/{input.fastqdir}/${{sample}}/
             sample_dir=$(ls $fastq_dir | grep $sample)
             fastq_dir=${{fastq_dir}}${{sample_dir}} 
-            cellranger count --id $sample --fastqs=${{fastq_dir}} --sample=${{sample}} --localcores={params.localcores} --localmem={params.localmem} --transcriptome={input.work_dir}/{input.cellranger_ref_path}/ &>> {input.work_dir}/{log}
+            cellranger count --id $sample --fastqs=${{fastq_dir}} --sample=${{sample}} --localcores={params.localcores} --localmem={params.localmem} --transcriptome={input.cellranger_ref_path}/ &>> {input.work_dir}/{log}
         done
         """
 
