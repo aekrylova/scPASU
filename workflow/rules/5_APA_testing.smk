@@ -151,8 +151,8 @@ rule make_track_annotations:
             file_prefix={params.fprefix}_noPASfiltering
         fi
 
-        genome_fai={input.work_dir}/{params.genomerefpath}/fasta/genome.fa.fai
-        chrome_sizes={input.work_dir}/{params.genomerefpath}/fasta/GRCh38_v2024_Chrom.sizes
+        genome_fai={params.genomerefpath}/fasta/genome.fa.fai
+        chrome_sizes={params.genomerefpath}/fasta/GRCh38_v2024_Chrom.sizes
         cut -f1,2 $genome_fai > $chrome_sizes 2>> {log}
 
         bed={input.bed_dir}/${{file_prefix}}_4thtu_assigned_plus.bed
