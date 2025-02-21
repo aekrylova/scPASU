@@ -13,7 +13,7 @@ rule create_gtf_db:
         "logs/create_gtf_db.log"
     shell: 
         """
-        python {input.polyA_dir}/polyAfilter.py createDB -v {input.work_dir}/{input.gtf} {input.work_dir}/{output.db} &> {log}
+        python {input.polyA_dir}/polyAfilter.py createDB -v {input.gtf} {input.work_dir}/{output.db} &>> {log}
         """
 
 rule preprocess_bam_dedup:
