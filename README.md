@@ -1,4 +1,5 @@
 # Snakemake workflow: scPASU
+Current computational methods for APA analysis from 3’ scRNA-seq data rely on already existing annotations of APA sites, preventing detection of novel APA sites. Here, we describe an HPC-based Snakemake pipeline that can be used in parallel with a standard scRNA-seq analysis and demonstrate the workflow using a toy dataset of bladder tissue fibroblasts. The pipeline generates a peak by cell count matrix from an initial input of BAM files generated from Cell Ranger alignment. It is flexible and easy to adapt to organism- and sample-specific parameters, and so provides a comprehensive framework for researchers to adapt to their own scRNA data.
 
 ## Installation requirements:
 Most of the needed packages and tools are included in the Snakemake environment.yml files. The following tools need to be installed separately:
