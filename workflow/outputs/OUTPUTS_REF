@@ -1,4 +1,4 @@
-This is a detailed list of all of the intermediate and final output files for the pipeline, for troubleshoting purposes
+This is a detailed list of all of the intermediate and final output files for the pipeline, for troubleshooting purposes
 
 outputs/
 ├── 1a1_dedup_bam/
