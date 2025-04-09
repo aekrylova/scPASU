@@ -1,4 +1,4 @@
-All outputs from the pipeline will be stored here
+All outputs from the pipeline will be stored here. Refer to OUTPUTS_REF for a detailed list of all of the sub-directories and files under these main directories.
 
 Overall directory structure (using example fibroblast dataset):
 
