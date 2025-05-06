@@ -1,6 +1,6 @@
 ## config file (yaml) with needed dependencies and variables: 
 
-## General Variables
+## Analysis Variables
 # File prefix name / cell type of interest
 compartment: "fibroblasts"
 # Genome (hg38 or mm11)
@@ -21,6 +21,58 @@ group_two: "Peri_urothelial_fibroblasts"
 # Name of column in your metadata file that contains the cell group names
 meta_testing_column: "cell_type"
 
+## polyAfilter variables
+# Maximum number of mismatches allowed within an internally primed read
+mism: 3
+# Number of threads for parallel computing while running polyA filtering
+nthreads: 32
+# Maximum coverage distance upstream of an internally primed read to look for sequencing reads to remove
+cov_len: 300
+# Minimal A length toclassify an internally primed read
+min_snr_len: 10
+
+## MACS2 variables
+# Effective genome size, change for an organism other than human
+gsize: "hs"
+# Size to extend towards 5'->3' reads shorter than this value to 
+extsize: 200
+
+## SAM to polyA variables
+# Minimum length of soft-clipped polyA tails
+min_clipped: 9
+# Minimum proportion of tail that is A or T required to call a polyA site 
+min_a_content: 0.85
+
+## Peak reference variables
+# Number of reads per bin to use when computing alignment signals
+binsize: 1
+# Size to extend peaks by
+# Make sure this is less than or equal to the MACS2 detected tag size- this can be found in the 2a_all_filtered_reads_peak_call_summits.log and 2a_polyAreads_peak_call_summits.log files
+peak_extsize: 90
+# Minimum number of polyA junctions/sites required for a peak to be retained in the reference (all_filtered_reads)
+afr_min_polya: 3
+# Minimum number of polyA junctions/sites required for a peak to be retained in the reference (polyA_reads)
+polyA_reads_min_polya: 1
+
+## Peak filtering variables
+# Maximum length of the peak processing region in bp
+maxwidth: 1000
+# Direction and distance, separated by a comma, in which to search for a polyA hexamer signal from a peak's PR region (optional PAS filtering variable)
+pr_extn: "5,50"
+# Maximum distance away from an annotated transcription end site a peak without a PAS signal can be to be retained (optional PAS filtering variable)
+tes_prox_distance: 100
+# Minimum per-gene read percentage for a peak to be retained
+min_cov: 10
+# Maximum percent of TU length that a peak can be from a transcriptional start site to be classified as TSS-proximal
+dist_pct: 0.1
+# For transcripts that both overlap with multiple exonic peaks and have multiple exons overlapping with those peaks, those with peak-overlapped exons adding up to less than frag_length bases in length will be a potential fragmented peak
+frag_length: 500
+# Distance to use when separating clusters of realigned reads on one exome
+gap_threshold: 0
+# A set of peaks will be flagged as one fragmented peak if each of them is made up of ≥ spliced_read_pct_thres spliced reads and these spliced reads when realigned against the right exome give rise to a peak made up of ≥ realign_peak_read_pct_thres of the total reads across the peaks
+spliced_read_pct_thres: 40
+realign_peak_read_pct_thres: 40
+
 ## Analysis Paths
 # Absolute path to the workflow directory
 work_dir: "/rsrch5/scratch/mol_cgenesis/aekrylova/Snakemake_draft/workflow/"
@@ -40,5 +92,5 @@ metadata_file: "data/fibroblasts_subset_metadata.csv"
 polyAfilterpath: "/rsrch5/scratch/mol_cgenesis/aekrylova/Snakemake_draft/workflow/scripts/polyAfilter/"
 # Absolute path to installation of the cellranger tool
 cellrangerpath: "/risapps/rhel7/cellranger/7.1.0/" 
-# Absolute path to directory that contains the installed goldmine package
+# Absolute path to installation of the goldmine package
 goldminepath: "/rsrch5/scratch/mol_cgenesis/aekrylova/Snakemake_draft/workflow/scripts"
