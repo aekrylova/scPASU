@@ -135,21 +135,33 @@ rule subset_bam:
         subset_after_filt="outputs/1c_subset_bam/{sample}_dedup_uniq_filtered_fibroblasts.bam"
     params:
         ncores=config["ncores"]
+        subset=config["subset"]
     conda:
         "../envs/module_1.yaml"
     log:
         "logs/1c_subset_bam/{sample}.log"
     shell:
         """
-        echo Subset-bam for the fibroblast compartment before genomicA filtering... &> {log}
-        subset-bam -b {input.before_filt} -c {input.barcodes} -o {output.subset_before_filt} --log-level debug --cores {params.ncores} &>> {log}
-        echo 'Indexing the last bam file...' &>> {log}
-        samtools index {output.subset_before_filt} &>> {log}
+        if [ {params.subset} == 'true' ]; then
+            echo 'Subset-bam for the fibroblast compartment before genomicA filtering...' &> {log}
+            subset-bam -b {input.before_filt} -c {input.barcodes} -o {output.subset_before_filt} --log-level debug --cores {params.ncores} &>> {log}
+            echo 'Indexing the last bam file...' &>> {log}
+            samtools index {output.subset_before_filt} &>> {log}
 
-        echo Subset-bam for the fibroblast compartment after genomicA filtering... &>> {log}
-        subset-bam -b {input.after_filt} -c {input.barcodes} -o {output.subset_after_filt} ---log-level debug --cores {params.ncores} &>> {log}
-        echo 'Indexing the last bam file...' &>> {log}
-        samtools index {output.subset_after_filt} &>> {log}
+            echo 'Subset-bam for the fibroblast compartment after genomicA filtering...' &>> {log}
+            subset-bam -b {input.after_filt} -c {input.barcodes} -o {output.subset_after_filt} ---log-level debug --cores {params.ncores} &>> {log}
+            echo 'Indexing the last bam file...' &>> {log}
+            samtools index {output.subset_after_filt} &>> {log}
+        else
+            echo 'No subsetting performed, bams from folders 1a2 and 1b will be copied directly to 1c' &> {log}
+            cp {input.work_dir}/{input.before_filt} {input.work_dir}/{output.subset_before_filt} &>> {log}
+            cp {input.work_dir}/{input.after_filt} {input.work_dir}/{output.subset_after_filt} &>> {log}
+            
+            echo 'Indexing the copied files...'
+            samtools index {input.work_dir}/{output.subset_before_filt} &>> {log}
+            samtools index {input.work_dir}/{output.subset_after_filt} &>> {log}
+        fi
+        
         """
 
 rule merge_bam_before_filt:
