@@ -9,6 +9,8 @@ genomename: "hg38"
 chrs: "chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr20,chr21,chr22,chrX,chrY"
 # Names of samples as they appear in cellranger alignment output
 samples: ["Donor_6-Dome", "Donor_6-Dome-Nuc", "Donor_6-Neck", "Donor_6-Neck-Nuc", "Donor_6-UO", "Donor_6-UO-Nuc", "Donor_6-UVJ", "Donor_6-UVJ-Nuc"]
+# Set "true" or "false" depending on if you want your cells to be subsetted by specific barcodes to the cell type of interest. If false, the total bams will just be copied over to the 1c_subset_bam folder
+subset: "true"
 # Set "true" or "false" depending on if you want PAS filtering to be performed
 PAS_filtering: "true"
 # Kmer size for nucleotide plotting
