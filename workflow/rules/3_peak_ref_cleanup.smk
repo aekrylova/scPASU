@@ -78,12 +78,12 @@ rule update_peak_ref_all_filtered_reads:
         work_dir=config["work_dir"]
     params:
         chrs=config["chrs"],
-        maxwidth=1000,
+        maxwidth=config["maxwidth"],
         PAS_filtering=config["PAS_filtering"],
-        pr_extn="5,50",
-        tes_prox_distance=100,
-        min_cov=10,
-        cores=16,
+        pr_extn=config["pr_extn"],
+        tes_prox_distance=config["tes_prox_distance"],
+        min_cov=config["min_cov"],
+        cores=config["ncores"],
         fprefix=f"{config['compartment']}_all_filtered_reads",
         goldmine_path=config["goldminepath"]
     output: 
@@ -197,12 +197,12 @@ rule update_peak_ref_polyA_reads:
         work_dir=config["work_dir"]
     params:
         chrs=config["chrs"],
-        maxwidth=1000,
+        maxwidth=config["maxwidth"],
         PAS_filtering=config["PAS_filtering"],
-        pr_extn="5,50",
-        tes_prox_distance=100,
-        min_cov=10,
-        cores=16,
+        pr_extn=config["pr_extn"],
+        tes_prox_distance=config["tes_prox_distance"],
+        min_cov=config["min_cov"],
+        cores=config["ncores"],
         fprefix=f"{config['compartment']}_polyA_reads",
         goldmine_path=config["goldminepath"]
     output: 
@@ -353,8 +353,8 @@ rule peak_classification:
         work_dir=config["work_dir"]
     params:
         PAS_filtering=config["PAS_filtering"],
-        dist_pct=0.1,
-        frag_length=500,
+        dist_pct=config["dist_pct"],
+        frag_length=config["frag_length"],
         ncores=config["ncores"],
         fprefix=config["compartment"],
         goldmine_path=config["goldminepath"]
@@ -387,11 +387,11 @@ rule identify_fragmented_peaks:
         work_dir=config["work_dir"]
     params:
         PAS_filtering=config["PAS_filtering"],
-        binsize=1,
-        gap_threshold=0,
-        min_coverage=10,
-        spliced_read_pct_thres=40,
-        realign_peak_read_pct_thres=40,
+        binsize=config["binsize"],
+        gap_threshold=config["gap_threshold"],
+        min_coverage=config["min_cov"],
+        spliced_read_pct_thres=config["spliced_read_pct_thres"],
+        realign_peak_read_pct_thres=config["realign_peak_read_pct_thres"],
         ncores=config["ncores"],
         fprefix=config["compartment"],
         goldmine_path=config["goldminepath"]
