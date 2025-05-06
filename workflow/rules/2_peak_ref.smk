@@ -7,8 +7,8 @@ rule all_filtered_reads_peak_call_summits:
     output:
         directory("outputs/2a_peaks/all_filtered_reads/")
     params:
-        gsize="hs",
-        extsize=200
+        gsize=config["gsize"],
+        extsize=config["extsize"]
     conda:
         "../envs/module_2.yaml"
     log:
@@ -59,8 +59,8 @@ rule polyAreads_sam_to_polyA:
     conda:
         "../envs/module_2.yaml"
     params:
-        min_clipped=9,
-        min_a_content=0.85
+        min_clipped=config["min_clipped"],
+        min_a_content=config["min_a_content"]
     log:
         "logs/2b_polyAreads_sam_to_polyA.log"
     shell: 
@@ -90,8 +90,8 @@ rule all_filtered_reads_sam_to_polyA:
     conda:
         "../envs/module_2.yaml"
     params:
-        min_clipped=9,
-        min_a_content=0.85
+        min_clipped=config["min_clipped"],
+        min_a_content=config["min_a_content"]
     log:
         "logs/2b_all_filtered_reads_sam_to_polyA.log"
     shell: 
@@ -161,8 +161,8 @@ rule polyAreads_peak_call_summits:
     log:
         "logs/2a_polyAreads_peak_call_summits.log"
     params:
-        gsize="hs",
-        extsize=200
+        gsize=config["gsize"],
+        extsize=config["extsize"]
     shell:
         """
         bam_prefix_plus=polyAreads_beforegenomicAfiltering_plus_nowrongstrand
@@ -203,8 +203,8 @@ rule bam_coverage_all_filtered_reads:
         bam_minus="outputs/1d_merged_bam/dedup_uniq_genomicAfiltered_merged_minus.bam",
         work_dir=config["work_dir"]
     params:
-        binsize=1,
-        fragmentsize=200,
+        binsize=config["binsize"],
+        fragmentsize=config["extsize"],
         ncores=config["ncores"],
     output:
         bw_plus="outputs/ucsc_tracks/bigwig_tracks/1bp/all_filtered_reads/dedup_uniq_genomicAfiltered_merged_plus_ext.bw",
@@ -244,8 +244,8 @@ rule bam_coverage_polyA_reads:
         bam_minus="outputs/2b_polya/before_genomicAfiltering/bam_files/polyAreads_beforegenomicAfiltering_minus_nowrongstrand.bam",
         work_dir=config["work_dir"]
     params:
-        binsize=1,
-        fragmentsize=200,
+        binsize=config["binsize"],
+        fragmentsize=config["extsize"],
         ncores=config["ncores"],
     output:
         bw_plus="outputs/ucsc_tracks/bigwig_tracks/1bp/polyA_reads/polyAreads_beforegenomicAfiltering_plus_nowrongstrand_ext.bw",
@@ -285,7 +285,7 @@ rule split_peak_ref_all_filtered_reads:
         work_dir=config["work_dir"],
     params:
         compartment=config["compartment"],
-        extsize=90,
+        extsize=config["peak_extsize"],
         chrs=config["chrs"],
         ncores=config["ncores"],
         direction=3,
@@ -309,7 +309,7 @@ rule split_peak_ref_polyA_reads:
         work_dir=config["work_dir"]
     params:
         compartment=config["compartment"],
-        extsize=90,
+        extsize=config["peak_extsize"],
         chrs=config["chrs"],
         ncores=config["ncores"],
         direction=5,
@@ -332,7 +332,7 @@ rule peak_ref_all_filtered_reads:
         polyA_dir="outputs/2b_polya/after_genomicAfiltering/",
         work_dir=config["work_dir"]
     params:
-        min_polyA=3,
+        min_polyA=config["afr_min_polya"],
         chrs=config["chrs"],
     output:
         directory("outputs/2d_intersect_run/all_filtered_reads/"),
@@ -358,7 +358,7 @@ rule peak_ref_polyA_reads:
         macs_dir="outputs/2c2_split_peaks/polyA_reads/",
         work_dir=config["work_dir"]
     params:
-        min_polyA=1,
+        min_polyA=config["polyA_reads_min_polya"],
         chrs=config["chrs"],
         polyA_dir="outputs/2b_polya/before_genomicAfiltering/"
     output:
