@@ -81,10 +81,10 @@ rule genomicA_filtering_first_round:
     output: 
         "outputs/1b_filtered_bam/{sample}_dedup_uniq_filtered_1stround.bam"
     params:
-        MISM=3,
-        NTHREADS=32,
-        COVLEN=300,
-        MINSNRLEN=10
+        MISM=config["mism"],
+        NTHREADS=config["nthreads"],
+        COVLEN=config["cov_len"],
+        MINSNRLEN=config["min_snr_len"]
     conda:
         "../envs/module_1.yaml"
     log:
@@ -109,10 +109,10 @@ rule genomicA_filtering_second_round:
     conda:
         "../envs/module_1.yaml"
     params:
-        MISM=3,
-        NTHREADS=32,
-        COVLEN=300,
-        MINSNRLEN=10
+        MISM=config["mism"],
+        NTHREADS=config["nthreads"],
+        COVLEN=config["cov_len"],
+        MINSNRLEN=config["min_snr_len"]
     log:
         "logs/1b_genomicA_filtering_second_round/{sample}.log"
     shell: 
