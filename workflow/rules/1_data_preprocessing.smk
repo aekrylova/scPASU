@@ -126,7 +126,6 @@ rule genomicA_filtering_second_round:
 
 rule subset_bam:
     input:
-        barcodes=f"{config['barcodepath']}/{{sample}}_subset_barcodes.tsv",
         before_filt="outputs/1a2_clean_bam/{sample}_dedup_uniq.bam",
         after_filt="outputs/1b_filtered_bam/{sample}_dedup_uniq_filtered_2ndround.bam",
         work_dir=config["work_dir"]
@@ -134,7 +133,8 @@ rule subset_bam:
         subset_before_filt="outputs/1c_subset_bam/{sample}_dedup_uniq_fibroblasts.bam",
         subset_after_filt="outputs/1c_subset_bam/{sample}_dedup_uniq_filtered_fibroblasts.bam"
     params:
-        ncores=config["ncores"]
+        ncores=config["ncores"],
+        barcodes=f"{config['barcodepath']}/{{sample}}_subset_barcodes.tsv",
         subset=config["subset"]
     conda:
         "../envs/module_1.yaml"
@@ -144,12 +144,12 @@ rule subset_bam:
         """
         if [ {params.subset} == 'true' ]; then
             echo 'Subset-bam for the fibroblast compartment before genomicA filtering...' &> {log}
-            subset-bam -b {input.before_filt} -c {input.barcodes} -o {output.subset_before_filt} --log-level debug --cores {params.ncores} &>> {log}
+            subset-bam -b {input.before_filt} -c {params.barcodes} -o {output.subset_before_filt} --log-level debug --cores {params.ncores} &>> {log}
             echo 'Indexing the last bam file...' &>> {log}
             samtools index {output.subset_before_filt} &>> {log}
 
             echo 'Subset-bam for the fibroblast compartment after genomicA filtering...' &>> {log}
-            subset-bam -b {input.after_filt} -c {input.barcodes} -o {output.subset_after_filt} ---log-level debug --cores {params.ncores} &>> {log}
+            subset-bam -b {input.after_filt} -c {params.barcodes} -o {output.subset_after_filt} ---log-level debug --cores {params.ncores} &>> {log}
             echo 'Indexing the last bam file...' &>> {log}
             samtools index {output.subset_after_filt} &>> {log}
         else
@@ -161,7 +161,7 @@ rule subset_bam:
             samtools index {input.work_dir}/{output.subset_before_filt} &>> {log}
             samtools index {input.work_dir}/{output.subset_after_filt} &>> {log}
         fi
-        
+
         """
 
 rule merge_bam_before_filt:
