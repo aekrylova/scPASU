@@ -32,6 +32,7 @@ counts<-lapply(f,function(x) {
   return(mtx)
 }
 )
+cat("Converted to dataframe \n")
 
 names(counts) <- samples
 
@@ -53,12 +54,12 @@ if (seurat_obj_path != '') {
       }
     }
   }
+  names(counts) <- NULL
+  merged_counts<-do.call(cbind,counts)
+  stopifnot(identical(sort(colnames(merged_counts)),sort(row.names(z@meta.data))))
+} else {
+  names(counts) <- NULL
+  merged_counts<-do.call(cbind,counts)
 }
-
-# Merge samples
-names(counts) <- NULL
-merged_counts<-do.call(cbind,counts)
-
-stopifnot(identical(sort(colnames(merged_counts)),sort(row.names(z@meta.data))))
 
 write.table(merged_counts,paste0(work_dir,'/',outdir,'/',fprefix,'_counts.txt'),row.names = TRUE, col.names = TRUE, quote = FALSE, sep='\t')
