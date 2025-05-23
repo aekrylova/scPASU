@@ -84,7 +84,7 @@ rule update_peak_ref_all_filtered_reads:
         tes_prox_distance=config["tes_prox_distance"],
         min_cov=config["min_cov"],
         cores=config["ncores"],
-        fprefix=f"{config['compartment']}_all_filtered_reads",
+        fprefix=config['compartment'],
         goldmine_path=config["goldminepath"]
     output: 
         pr_filter=directory("outputs/3b1_filtered_by_PR_width/all_filtered_reads/"),
@@ -101,10 +101,10 @@ rule update_peak_ref_all_filtered_reads:
         mkdir -p {output.pr_filter}
 
         echo Update peak reference... &> {log}
-        Rscript {input.work_dir}/scripts/3_peak_ref_cleanup/3b1_filter_by_pr_width.R -r {input.ref_dir}/{params.fprefix}_1sttu_assigned_peak_universe_updated.txt -o {output.pr_filter}/ -f {params.fprefix} -m {params.maxwidth} &>> {log}
+        Rscript {input.work_dir}/scripts/3_peak_ref_cleanup/3b1_filter_by_pr_width.R -r {input.ref_dir}/{params.fprefix}_all_filtered_reads_1sttu_assigned_peak_universe_updated.txt -o {output.pr_filter}/ -f {params.fprefix}_all_filtered_reads -m {params.maxwidth} &>> {log}
 
-        ref1={input.work_dir}/{output.pr_filter}/{params.fprefix}_pr_filtered_peak_ref.txt
-        turef={input.work_dir}/{input.ref_dir}/{params.fprefix}_1sttu_assigned_turef_flankupdated.rds
+        ref1={input.work_dir}/{output.pr_filter}/{params.fprefix}_all_filtered_reads_pr_filtered_peak_ref.txt
+        turef={input.work_dir}/{input.ref_dir}/{params.fprefix}_all_filtered_reads_1sttu_assigned_turef_flankupdated.rds
         
         # Filter by polyA hexamer signals (PAS.fa) and proximity to annotated transcript ends
 
@@ -113,15 +113,15 @@ rule update_peak_ref_all_filtered_reads:
             echo Prepare bed input for hexamer checking... &>> {log}
             out2={input.work_dir}/outputs/3b2_filtered_by_PAS_and_TES/all_filtered_reads/
             mkdir -p ${{out2}}
-            Rscript {input.work_dir}/scripts/3_peak_ref_cleanup/3b2_hexamer_check_bed_input.R -r ${{ref1}} -o ${{out2}} -f {params.fprefix} -e {params.pr_extn} &>> {log}
+            Rscript {input.work_dir}/scripts/3_peak_ref_cleanup/3b2_hexamer_check_bed_input.R -r ${{ref1}} -o ${{out2}} -f {params.fprefix}_all_filtered_reads -e {params.pr_extn} &>> {log}
 
-            bed_input=${{out2}}{params.fprefix}_hexamer_check_input.bed
-            fa_output=${{out2}}{params.fprefix}_hexamer_check_input.fa
+            bed_input=${{out2}}{params.fprefix}_all_filtered_reads_hexamer_check_input.bed
+            fa_output=${{out2}}{params.fprefix}_all_filtered_reads_hexamer_check_input.fa
             echo Extract genomic ranges of peaks from reference genome... &>> {log}
             bedtools getfasta -fi {input.fasta} -bed $bed_input -s -nameOnly -fo $fa_output &>> {log}
 
-            peaks_with_hexamers=${{out2}}{params.fprefix}_peaks_with_hexamer.txt
-            peaks_wo_hexamers=${{out2}}{params.fprefix}_peaks_wo_hexamer.txt
+            peaks_with_hexamers=${{out2}}{params.fprefix}_all_filtered_reads_peaks_with_hexamer.txt
+            peaks_wo_hexamers=${{out2}}{params.fprefix}_all_filtered_reads_peaks_wo_hexamer.txt
             PAS_file={input.work_dir}/scripts/PAS.fa
 
             echo Check PAS presence in peaks... &>> {log}
@@ -129,19 +129,20 @@ rule update_peak_ref_all_filtered_reads:
             diff -u <(grep '^>' $fa_output| sort) <(sort $peaks_with_hexamers) | grep '^->' > $peaks_wo_hexamers 2>> {log}
 
             echo Check proximity to TES in peaks without PAS... &>> {log}
-            Rscript {input.work_dir}/scripts/3_peak_ref_cleanup/3b2_TES_proximity_check.R -b {params.tes_prox_distance} -t $turef -f {params.fprefix} -o $out2 -r $ref1 &>> {log}
-            ref2a=${{out2}}{params.fprefix}_peaks_PAS_and_TES_filtered.txt
+            Rscript {input.work_dir}/scripts/3_peak_ref_cleanup/3b2_TES_proximity_check.R -b {params.tes_prox_distance} -t $turef -f {params.fprefix}_all_filtered_reads -o $out2 -r $ref1 &>> {log}
+            ref2a=${{out2}}{params.fprefix}_all_filtered_reads_peaks_PAS_and_TES_filtered.txt
+            fprefix1={params.fprefix}_all_filtered_reads
         else
             echo Skip filtering by PAS... &>> {log}
             out2={input.work_dir}/{output.pr_filter}/
-            ref2a=${{out2}}{params.fprefix}_pr_filtered_peak_ref.txt
+            ref2a=${{out2}}{params.fprefix}_all_filtered_reads_pr_filtered_peak_ref.txt
             fprefix1={params.fprefix}_noPASfiltering_all_filtered_reads
         fi
 
         # Assign TU - to update peak ref
 
         echo 2nd TU assignment and peak ref update... &>> {log}
-        fprefix2={params.fprefix}_2ndtu_assigned
+        fprefix2=${{fprefix1}}_2ndtu_assigned
         Rscript {input.work_dir}/scripts/3_peak_ref_cleanup/3a_assign_tu.R -d {input.work_dir}/scripts/3_peak_ref_cleanup/ -m {params.goldmine_path} -f ${{fprefix2}} -o ${{out2}} -t ${{turef}} -b ${{ref2a}} -c {params.chrs} &>> {log}
 
         echo Create bed file for UCSC uploads... &>> {log}
@@ -153,33 +154,33 @@ rule update_peak_ref_all_filtered_reads:
         echo Get peak counts using bam... &>> {log}
         ref_saf=${{out2}}${{fprefix2}}_peak_universe_updated.saf
         mkdir -p {output.peak_cov}
-        Rscript {input.work_dir}/scripts/feature_counts.R -b {input.bam} -r ${{ref_saf}} -o {output.peak_cov}/ -f {params.fprefix} -c {params.cores} -i no &>> {log}
+        Rscript {input.work_dir}/scripts/feature_counts.R -b {input.bam} -r ${{ref_saf}} -o {output.peak_cov}/ -f ${{fprefix1}} -c {params.cores} -i no &>> {log}
 
         # Calculate per TU peak coverage
 
         echo Get peak coverage... &>> {log}
-        counts_file={input.work_dir}/{output.peak_cov}/{params.fprefix}_peak_count.rds
+        counts_file={input.work_dir}/{output.peak_cov}/${{fprefix1}}_peak_count.rds
         Rscript {input.work_dir}/scripts/3_peak_ref_cleanup/3b3_peaks_coverage.R -r ${{ref2b}} -c ${{counts_file}} -o {output.peak_cov}/ &>> {log}
 
         # Plot peak coverage percent
 
         echo Peak coverage plot... &>> {log}
-        pcov_file={input.work_dir}/{output.peak_cov}/{params.fprefix}_peak_count_updated.rds
+        pcov_file={input.work_dir}/{output.peak_cov}/${{fprefix1}}_peak_count_updated.rds
         w=11
         h=8
         x=100
         y=5000
-        Rscript {input.work_dir}/scripts/3_peak_ref_cleanup/3b3_plot_peak_cov.R -p ${{pcov_file}} -o {output.peak_cov}/ -m {params.goldmine_path} -f {params.fprefix} -a ${{w}},${{h}},${{x}},${{y}} -s {input.work_dir}/scripts/3_peak_ref_cleanup/ &>> {log}
+        Rscript {input.work_dir}/scripts/3_peak_ref_cleanup/3b3_plot_peak_cov.R -p ${{pcov_file}} -o {output.peak_cov}/ -m {params.goldmine_path} -f ${{fprefix1}} -a ${{w}},${{h}},${{x}},${{y}} -s {input.work_dir}/scripts/3_peak_ref_cleanup/ &>> {log}
         
         # Filter peak ref
         echo Filter peak ref by coverage... &>> {log}
         mkdir -p {output.peak_cov_filt}
-        Rscript {input.work_dir}/scripts/3_peak_ref_cleanup/3b4_filter_peak_ref.R -r ${{ref2b}} -p ${{pcov_file}} -o {output.peak_cov_filt}/ -f {params.fprefix} -m {params.min_cov} &>> {log}
+        Rscript {input.work_dir}/scripts/3_peak_ref_cleanup/3b4_filter_peak_ref.R -r ${{ref2b}} -p ${{pcov_file}} -o {output.peak_cov_filt}/ -f ${{fprefix1}} -m {params.min_cov} &>> {log}
 
         # Assign TU
         echo 3rd TU assignment... &>> {log}
-        ref3={input.work_dir}/{output.peak_cov_filt}/{params.fprefix}_cov_filtered_peak_ref.txt
-        fprefix3={params.fprefix}_3rdtu_assigned
+        ref3={input.work_dir}/{output.peak_cov_filt}/${{fprefix1}}_cov_filtered_peak_ref.txt
+        fprefix3=${{fprefix1}}_3rdtu_assigned
         turef=$(ls ${{out2}}*_2ndtu_assigned_turef_flankupdated.rds)
         Rscript {input.work_dir}/scripts/3_peak_ref_cleanup/3a_assign_tu.R -d {input.work_dir}/scripts/3_peak_ref_cleanup/ -m {params.goldmine_path} -f ${{fprefix3}} -o {output.peak_cov_filt}/ -t ${{turef}} -b ${{ref3}} -c {params.chrs} &>> {log}
 
@@ -203,7 +204,7 @@ rule update_peak_ref_polyA_reads:
         tes_prox_distance=config["tes_prox_distance"],
         min_cov=config["min_cov"],
         cores=config["ncores"],
-        fprefix=f"{config['compartment']}_polyA_reads",
+        fprefix=config['compartment'],
         goldmine_path=config["goldminepath"]
     output: 
         pr_filter=directory("outputs/3b1_filtered_by_PR_width/polyA_reads/"),
@@ -220,10 +221,10 @@ rule update_peak_ref_polyA_reads:
         mkdir -p {output.pr_filter}
 
         echo Update peak reference... &> {log}
-        Rscript {input.work_dir}/scripts/3_peak_ref_cleanup/3b1_filter_by_pr_width.R -r {input.ref_dir}/{params.fprefix}_1sttu_assigned_peak_universe_updated.txt -o {output.pr_filter}/ -f {params.fprefix} -m {params.maxwidth} &>> {log}
+        Rscript {input.work_dir}/scripts/3_peak_ref_cleanup/3b1_filter_by_pr_width.R -r {input.ref_dir}/{params.fprefix}_polyA_reads_1sttu_assigned_peak_universe_updated.txt -o {output.pr_filter}/ -f {params.fprefix}_polyA_reads -m {params.maxwidth} &>> {log}
 
-        ref1={input.work_dir}/{output.pr_filter}/{params.fprefix}_pr_filtered_peak_ref.txt
-        turef={input.work_dir}/{input.ref_dir}/{params.fprefix}_1sttu_assigned_turef_flankupdated.rds
+        ref1={input.work_dir}/{output.pr_filter}/{params.fprefix}_polyA_reads_pr_filtered_peak_ref.txt
+        turef={input.work_dir}/{input.ref_dir}/{params.fprefix}_polyA_reads_1sttu_assigned_turef_flankupdated.rds
 
         # Filter by polyA hexamer signals (PAS.fa) and proximity to annotated transcript ends
 
@@ -232,15 +233,15 @@ rule update_peak_ref_polyA_reads:
             echo Prepare bed input for hexamer checking... &>> {log}
             out2={input.work_dir}/outputs/3b2_filtered_by_PAS_and_TES/polyA_reads/
             mkdir -p ${{out2}}
-            Rscript {input.work_dir}/scripts/3_peak_ref_cleanup/3b2_hexamer_check_bed_input.R -r ${{ref1}} -o ${{out2}} -f {params.fprefix} -e {params.pr_extn} &>> {log}
+            Rscript {input.work_dir}/scripts/3_peak_ref_cleanup/3b2_hexamer_check_bed_input.R -r ${{ref1}} -o ${{out2}} -f {params.fprefix}_polyA_reads -e {params.pr_extn} &>> {log}
 
-            bed_input=${{out2}}/{params.fprefix}_hexamer_check_input.bed
-            fa_output=${{out2}}/{params.fprefix}_hexamer_check_input.fa
+            bed_input=${{out2}}/{params.fprefix}_polyA_reads_hexamer_check_input.bed
+            fa_output=${{out2}}/{params.fprefix}_polyA_reads_hexamer_check_input.fa
             echo Extract genomic ranges of peaks from reference genome... &>> {log}
             bedtools getfasta -fi {input.fasta} -bed $bed_input -s -nameOnly -fo $fa_output &>> {log}
 
-            peaks_with_hexamers=${{out2}}/{params.fprefix}_peaks_with_hexamer.txt
-            peaks_wo_hexamers=${{out2}}{params.fprefix}_peaks_wo_hexamer.txt
+            peaks_with_hexamers=${{out2}}/{params.fprefix}_polyA_reads_peaks_with_hexamer.txt
+            peaks_wo_hexamers=${{out2}}{params.fprefix}_polyA_reads_peaks_wo_hexamer.txt
             PAS_file={input.work_dir}/scripts/PAS.fa
 
             echo Check PAS presence in peaks... &>> {log}
@@ -248,19 +249,20 @@ rule update_peak_ref_polyA_reads:
             diff -u <(grep '^>' $fa_output| sort) <(sort $peaks_with_hexamers) | grep '^->' > $peaks_wo_hexamers 2>> {log}
 
             echo Check proximity to TES in peaks without PAS... &>> {log}
-            Rscript {input.work_dir}/scripts/3_peak_ref_cleanup/3b2_TES_proximity_check.R -b {params.tes_prox_distance} -t $turef -f {params.fprefix} -o $out2 -r $ref1 &>> {log}
-            ref2a=${{out2}}{params.fprefix}_peaks_PAS_and_TES_filtered.txt
+            Rscript {input.work_dir}/scripts/3_peak_ref_cleanup/3b2_TES_proximity_check.R -b {params.tes_prox_distance} -t $turef -f {params.fprefix}_polyA_reads -o $out2 -r $ref1 &>> {log}
+            ref2a=${{out2}}{params.fprefix}_polyA_reads_peaks_PAS_and_TES_filtered.txt
+            fprefix1={params.fprefix}_polyA_reads
         else
             echo Skip filtering by PAS... &>> {log}
             out2={input.work_dir}/{output.pr_filter}/
-            ref2a=${{out2}}{params.fprefix}_pr_filtered_peak_ref.txt
+            ref2a=${{out2}}{params.fprefix}_polyA_reads_pr_filtered_peak_ref.txt
             fprefix1={params.fprefix}_noPASfiltering_polyA_reads
         fi
 
         # Assign TU - to update peak ref
 
         echo 2nd TU assignment... &>> {log}
-        fprefix2={params.fprefix}_2ndtu_assigned
+        fprefix2=${{fprefix1}}_2ndtu_assigned
         Rscript {input.work_dir}/scripts/3_peak_ref_cleanup/3a_assign_tu.R -d {input.work_dir}/scripts/3_peak_ref_cleanup/ -m {params.goldmine_path} -f ${{fprefix2}} -o ${{out2}} -t ${{turef}} -b ${{ref2a}} -c {params.chrs} &>> {log}
 
         echo Create bed file for UCSC uploads... &>> {log}
@@ -272,33 +274,33 @@ rule update_peak_ref_polyA_reads:
         echo Get peak counts using bam... &>> {log}
         ref_saf=${{out2}}${{fprefix2}}_peak_universe_updated.saf
         mkdir -p {output.peak_cov}
-        Rscript {input.work_dir}/scripts/feature_counts.R -b {input.bam} -r ${{ref_saf}} -o {output.peak_cov}/ -f {params.fprefix} -c {params.cores} -i no &>> {log}
+        Rscript {input.work_dir}/scripts/feature_counts.R -b {input.bam} -r ${{ref_saf}} -o {output.peak_cov}/ -f ${{fprefix1}} -c {params.cores} -i no &>> {log}
 
         # Calculate per TU peak coverage
 
         echo Get peak coverage... &>> {log}
-        counts_file={input.work_dir}/{output.peak_cov}/{params.fprefix}_peak_count.rds
+        counts_file={input.work_dir}/{output.peak_cov}/${{fprefix1}}_peak_count.rds
         Rscript {input.work_dir}/scripts/3_peak_ref_cleanup/3b3_peaks_coverage.R -r ${{ref2b}} -c ${{counts_file}} -o {output.peak_cov}/ &>> {log}
 
         # Plot peak coverage percent
 
         echo Peak coverage plot... &>> {log}
-        pcov_file={input.work_dir}/{output.peak_cov}/{params.fprefix}_peak_count_updated.rds
+        pcov_file={input.work_dir}/{output.peak_cov}/${{fprefix1}}_peak_count_updated.rds
         w=11
         h=8
         x=100
         y=5000
-        Rscript {input.work_dir}/scripts/3_peak_ref_cleanup/3b3_plot_peak_cov.R -p ${{pcov_file}} -o {output.peak_cov}/ -m {params.goldmine_path} -f {params.fprefix} -a ${{w}},${{h}},${{x}},${{y}} -s {input.work_dir}/scripts/3_peak_ref_cleanup/ &>> {log}
+        Rscript {input.work_dir}/scripts/3_peak_ref_cleanup/3b3_plot_peak_cov.R -p ${{pcov_file}} -o {output.peak_cov}/ -m {params.goldmine_path} -f ${{fprefix1}} -a ${{w}},${{h}},${{x}},${{y}} -s {input.work_dir}/scripts/3_peak_ref_cleanup/ &>> {log}
         
         # Filter peak ref
         echo Filter peak ref by coverage... &>> {log}
         mkdir -p {output.peak_cov_filt}
-        Rscript {input.work_dir}/scripts/3_peak_ref_cleanup/3b4_filter_peak_ref.R -r ${{ref2b}} -p ${{pcov_file}} -o {output.peak_cov_filt}/ -f {params.fprefix} -m {params.min_cov} &>> {log}
+        Rscript {input.work_dir}/scripts/3_peak_ref_cleanup/3b4_filter_peak_ref.R -r ${{ref2b}} -p ${{pcov_file}} -o {output.peak_cov_filt}/ -f ${{fprefix1}} -m {params.min_cov} &>> {log}
 
         # Assign TU
         echo 3rd TU assignment... &>> {log}
-        ref3={input.work_dir}/{output.peak_cov_filt}/{params.fprefix}_cov_filtered_peak_ref.txt
-        fprefix3={params.fprefix}_3rdtu_assigned
+        ref3={input.work_dir}/{output.peak_cov_filt}/${{fprefix1}}_cov_filtered_peak_ref.txt
+        fprefix3=${{fprefix1}}_3rdtu_assigned
         turef=$(ls ${{out2}}*_2ndtu_assigned_turef_flankupdated.rds)
         Rscript {input.work_dir}/scripts/3_peak_ref_cleanup/3a_assign_tu.R -d {input.work_dir}/scripts/3_peak_ref_cleanup/ -m {params.goldmine_path} -f ${{fprefix3}} -o {output.peak_cov_filt}/ -t ${{turef}} -b ${{ref3}} -c {params.chrs} &>> {log}
 
