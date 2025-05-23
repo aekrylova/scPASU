@@ -1,13 +1,9 @@
 #!/usr/bin/bash
-
 ## This script creates peak ref using MACS2 callpeak outputs on polyA reads and such polyA reads ##
-
 # Author: Surbhi Sona, Ninh Le
-
 ## User inputs ##
 
 OPTIND=1
-
 while getopts "m:p:o:s:c:n:t:" opt;do
   case $opt in
   m)
