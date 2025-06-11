@@ -47,7 +47,7 @@ rule APA_testing:
         group_two=config["group_two"],
         meta_testing_column=config["meta_testing_column"],
         file_prefix=config["compartment"],
-        min_cell_expr_pct=10
+        min_cell_expr_pct=config["min_cell_expr_pct"]
     conda:
         "../envs/module_5.yaml"
     log:
@@ -67,6 +67,8 @@ rule DEG_testing:
         group_two=config["group_two"],
         meta_testing_column=config["meta_testing_column"],
         file_prefix=config["compartment"],
+        cutoff_pct=config["cutoff_pct"],
+        min_cell_per_group=config["min_cell_per_group"]
     conda:
         "../envs/module_5.yaml"
     log:
@@ -165,4 +167,3 @@ rule make_track_annotations:
         sort -k1,1 -k2,2n $bed > ${{bed%.bed}}_sorted.bed 2>> {log}
         bedToBigBed -tab ${{bed%.bed}}_sorted.bed $chrome_sizes ${{bigBed}} &>> {log}
         """
-
