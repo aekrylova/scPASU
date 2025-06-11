@@ -22,6 +22,12 @@ group_one: "Intra_muscular_fibroblasts"
 group_two: "Peri_urothelial_fibroblasts"
 # Name of column in your metadata file that contains the cell group names
 meta_testing_column: "cell_type"
+# Percent threshold for APA filtering. Peaks that are expressed by less than this percentage of cells within the cell group will be filtered out.
+min_cell_expr_pct: 10
+# Percent thresholds for DEG filtering. Genes whose total counts across cells are less than cutoff_pct% of the number of cells will be filtered out.
+# Cell groups that have fewer than min_cell_per_group cells will be filtered out.
+cutoff_pct: 1
+min_cell_per_group: 10
 
 ## polyAfilter variables
 # Maximum number of mismatches allowed within an internally primed read
