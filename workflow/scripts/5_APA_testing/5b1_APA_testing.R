@@ -114,3 +114,9 @@ write.table(raw.count,paste0(outdir,comp,'_raw.count.txt'),col.names = TRUE, row
 res <- DEXseq_res$res
 res <- res[,-c('dexseq_sig','ttest_sig','all_tests_sig', 'delta_sig', 'perfc_sig')]
 write.table(res,paste0(outdir,comp,'_res.txt'),col.names = TRUE, row.names = FALSE, quote = FALSE, sep = '\t')
+
+# Print session info
+sessionInfo()
+cat('\n')
+
+cat('End of script ','\n')
