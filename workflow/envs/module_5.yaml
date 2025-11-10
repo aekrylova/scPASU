@@ -9,7 +9,7 @@ dependencies:
  - r-dplyr=1.1.4
  - r-stringr=1.5.1
  - r-seurat=5.1.0
- - r-ggplot2=3.5.1
+ - r-ggplot2=3.5.2
  - r-reshape=0.8.9
  - r-readr=2.1.5
  - r-pheatmap=1.0.12
